@@ -1,0 +1,11 @@
+model\Key.class
+worker\GameDispatcher.class
+model\Item.class
+model\Player.class
+model\Door$Direction.class
+model\Door.class
+model\Universe.class
+model\Event.class
+model\Room.class
+controller\MainController.class
+worker\ConnectionHandler.class
