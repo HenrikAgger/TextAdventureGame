@@ -8,13 +8,12 @@ package controller;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.concurrent.LinkedBlockingDeque;
 import model.Door;
+import model.Enemy;
 import model.Event;
 import model.Key;
 import model.Player;
 import model.Room;
-import worker.ConnectionHandler;
 
 /**
  *
@@ -22,29 +21,54 @@ import worker.ConnectionHandler;
  */
 public class MainController {
 
-    public static LinkedBlockingDeque<Event> events = new LinkedBlockingDeque<>();
-    public static ArrayList<Event> testEvents = new ArrayList<>();
-    public static Room spawnPoint;
-    public ArrayList<Player> connectionHandlers;
+//    public static LinkedBlockingDeque<Event> events = new LinkedBlockingDeque<>();
+//    public static ArrayList<Event> testEvents = new ArrayList<>();
+//    public static ArrayList<Room> rooms = new ArrayList<>();
+//    public static Room spawnPoint;
+//    public ArrayList<Player> connectionHandlers;
 
-    public MainController(ArrayList<Player> connectionHandlers) {
-        this.connectionHandlers = connectionHandlers;
+//    public MainController(ArrayList<Player> connectionHandlers) {
+//        this.connectionHandlers = connectionHandlers;
+//    }
+    // MVP fields
+    private Enemy enemy;
+    private Player player;
+    public static ArrayList<Room> rooms = new ArrayList<>();
+    
+    // MVP constructor
+    public MainController(Player player, ArrayList<Room> rooms, Enemy enemy  ){
+        this.player = player;
+        this.rooms = rooms;
+        this.enemy = enemy;
     }
-
+    
+    public void initGame(){
+        
+    }
+    
+    
     public void runGame() {
-        Room room1 = new Room("Entrence to the dungeon");
-        Room room2 = new Room("You are in a room with a lot of old skeletons ");
-        Room room3 = new Room("There is a huge spiderweb in this room");
-        Room room4 = new Room("You walk a few steps and suddenly you see an sacrifice alter");
-        Room room5 = new Room("You can see a chest, you open it take all the gold with you."
+        Room room1 = new Room("room1", "Entrence to the dungeon");
+        rooms.add(room1);
+        Room room2 = new Room("room2", "You are in a room with a lot of old skeletons ");
+        rooms.add(room2);
+        Room room3 = new Room("room3", "There is a huge spiderweb in this room");
+        rooms.add(room3);
+        Room room4 = new Room("room4", "You walk a few steps and suddenly you see an sacrifice alter");
+        rooms.add(room4);
+        Room room5 = new Room("room5", "You can see a chest, you open it take all the gold with you."
                 + " you see light, you have found the exit");
-        Room exit = new Room("YOU WON");
+        rooms.add(room5);
+        Room room6 = new Room("room6", "YOU WON");
+        rooms.add(room6);
         this.spawnPoint = room1;
         Key k = new Key("Universal", "Key for all");
         Door door = new Door(k, "Exit", "Get out");
         // 1st room
+
         room1.addDoor(door, Door.Direction.NORTH, room3);
         room1.addDoor(door, Door.Direction.EAST, room2);
+
         // 2nd room
         room2.addDoor(door, Door.Direction.NORTH, room4);
         room2.addDoor(door, Door.Direction.WEST, room1);
@@ -56,20 +80,20 @@ public class MainController {
         room4.addDoor(door, Door.Direction.SOUTH, room2);
         room4.addDoor(door, Door.Direction.WEST, room3);
         // 5th room
-        room5.addDoor(door, Door.Direction.NORTH, exit);
+        room5.addDoor(door, Door.Direction.NORTH, room6);
 
         int choice = 0;
         Player p = connectionHandlers.get(0);
+        p.setHere(room1);
         boolean notempty = true;
         // Tag næste event fra eventkøen
         while (notempty) //while (choice!=9){
         {
+            System.out.println(p.getHere());
             process(p, "MOVE room2");
-            
+            System.out.println(p.getHere());
+            notempty = false;
         }
-
-
-
 
         //  choice = p.move(room);
         //}
@@ -83,7 +107,7 @@ public class MainController {
     public static void process(Player p, String input) {
         String[] tmpArr = input.split(" ");
         String action = tmpArr[0];
-        String[] tokensArr = Arrays.copyOf(tmpArr, tmpArr.length - 1);
+        String[] tokensArr = Arrays.copyOfRange(tmpArr, 1, tmpArr.length);
         String tokens = String.join(" ", tokensArr);
 
         switch (action) {
@@ -107,16 +131,20 @@ public class MainController {
         PrintWriter pw = p.getWriter();
         pw.println("And this is good for you");
     }
-
+    
+    
+    
     public static void processMove(Player p, String tokens) {
         System.out.println("Hi " + p.getName());
         Room r = p.getHere();
-        PrintWriter pw = p.getWriter();
+//        PrintWriter pw = p.getWriter();
         System.out.println("You are in room " + r.getName());
-        pw.println("You are in room " + r.getName());
-        pw.println(" and want to move to " + tokens);
+        System.out.println("You are in room " + r.getName());
+        System.out.println(" and want to move to " + tokens);
         r.removePlayer(p);
-
+        Room targetRoom = findRoom(tokens);
+        p.setHere(targetRoom);
+        System.out.println("Player is now in " + p.getHere());
 
         /*
         p.move(dest);
@@ -145,4 +173,15 @@ public class MainController {
             return;
         }
     }
+
+    public static Room findRoom(String userRoom) {
+        for (Room room : rooms) {
+            if (room.getName().equals(userRoom)) {
+                return room;
+            }
+
+        }
+        return null;
+    }
+
 }

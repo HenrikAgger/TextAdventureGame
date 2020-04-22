@@ -15,12 +15,21 @@ import java.util.Random;
 public class Room {
     Door door;
     String name;
+    String description;
     private Hashtable<String, Item> items;
     private Hashtable<String, Player> players;
     private Hashtable<Door.Direction, Room> exits;
     private Enemy enemy;
-    
 
+    public Room(String name, String description) {
+        this.name = name;
+        this.description = description;
+        exits = new Hashtable<Door.Direction, Room>();
+        players = new Hashtable<String, Player>();
+    }
+    
+    
+    
     public Room(String name) {
         exits = new Hashtable<Door.Direction, Room>();
         this.name = name;
@@ -57,5 +66,13 @@ public class Room {
         Room newRoom = this.exits.get(direction);
         return newRoom;
     }
+
+    
+    @Override
+    public String toString() {
+        String message = "name: " + this.name;
+        return message;
+    }
+       
     
 }

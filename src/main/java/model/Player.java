@@ -17,6 +17,16 @@ public class Player {
     private String name;
     private PrintWriter out;
 
+    public Player(String name) {
+        this.name = name;
+    }
+
+    public Player(Room here, String name) {
+        this.here = here;
+        this.name = name;
+    }
+
+    
     public Player(String name, Room spawn, PrintWriter out) {
         this.name = name;
         this.here = spawn;

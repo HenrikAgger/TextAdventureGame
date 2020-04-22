@@ -6,11 +6,8 @@
 package main;
 
 import controller.MainController;
-import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
 import java.util.ArrayList;
-import tobedeleted.Player;
+import model.Player;
 import worker.ConnectionHandler;
 
 /**
@@ -24,6 +21,12 @@ public class Main {
         int counter = 0;
         ArrayList<ConnectionHandler> clientHandlers = new ArrayList<>();
         ArrayList<Player> players = new ArrayList<>();
+        
+        // public Player(String name, Room spawn, PrintWrither out)
+        Player player = new Player("Kurt");
+        players.add(player);
+        
+        
 //        try {
 //            ServerSocket serverSocket = new ServerSocket(9091);
 //            while (counter < limit) {
