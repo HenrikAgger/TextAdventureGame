@@ -34,11 +34,6 @@ public class Room {
         exits = new Hashtable<Door.Direction, Room>();
         this.name = name;
         Random rand = new Random();
-        if (rand.nextBoolean()){
-            enemy = new Enemy(50);
-        } else {
-            enemy = null;
-        }
         
     }
 

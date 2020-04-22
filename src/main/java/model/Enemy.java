@@ -11,11 +11,13 @@ package model;
  */
 public class Enemy {
     private int health = 50;
+    private String enemyName;
 
-//    private String enemy = {"warrior, skeleton, assasin};
-
-    public Enemy(int health) {
+   
+    
+    public Enemy(int health, String enemyName) {
         this.health = health;
+        this.enemyName = enemyName;
     }
 
     public int getHealth() {
@@ -24,6 +26,10 @@ public class Enemy {
 
     public void setHealth(int health) {
         this.health = health;
+    }
+
+    public String getEnemyName() {
+        return enemyName;
     }
     
     
