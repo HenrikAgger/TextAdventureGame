@@ -5,14 +5,14 @@
  */
 package worker;
 
+import controller.Controller;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
-import java.util.concurrent.ArrayBlockingQueue;
 import model.Event;
+import model.Player;
 
 /**
  *
@@ -20,44 +20,45 @@ import model.Event;
  */
 public class Producer extends Thread {
 
-    Scanner scan = new Scanner(System.in);
-    private ArrayBlockingQueue<Event> queue;
     private Socket socket;
     private PrintWriter printWriter;
     private BufferedReader br;
+    private Controller controller;
+    private Player player;
 
-    public Producer(ArrayBlockingQueue<Event> queue) {
-        this.queue = queue;
-    }
-
-    public Producer(ArrayBlockingQueue<Event> queue, Socket socket) throws IOException {
-        this.queue = queue;
+    public Producer(Socket socket, Controller controller) throws IOException {
         this.socket = socket;
+        this.controller = controller;
         this.printWriter = new PrintWriter(socket.getOutputStream(), true);
         this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
-    public void Write(Event event) {
-        try {
-            queue.add(event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-    
-    public void run(){
-        while(true){
+//    public void Write(Event event) {
+//        try {
+//            queue.add(event);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
+    public void run() {
+        while (true) {
             String line = "";
-            printWriter.println("Insert a few words");
-            try{
+            printWriter.println("What is your name");
+            try {
+
                 line = br.readLine();
-            } catch(IOException e){
+                player = controller.registerPlayer(line, printWriter);
+                while ((line = br.readLine()) != null) {
+                    controller.processMessage(player, line);
+                    
+                }
+            } catch (IOException e) {
                 e.getStackTrace();
             }
             Event event = new Event(line);
-            Write(event);
-            printWriter.println("Du har valgt at indsætte følgende: "+line);
+//            Write(event);
+            printWriter.println("Du har valgt at indsætte følgende: " + line);
         }
     }
-    
+
 }

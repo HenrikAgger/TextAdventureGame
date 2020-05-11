@@ -27,6 +27,7 @@ public class Main {
         Player player = new Player("Kurt");
         Monster monster = new Monster("Troll");
 
-        Controller controller = new Controller(player, monster, events);
+        Controller controller = new Controller(events);
+        controller.runGame();
     }
 }
