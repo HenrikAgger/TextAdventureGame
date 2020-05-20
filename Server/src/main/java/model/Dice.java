@@ -11,13 +11,18 @@ package model;
  */
 public class Dice {
     private int value;
+
+    public Dice() {
+        this.value = roll();
+    }
     
     public int getValue(){
         return value;
     }
     
-    public void roll(){
+    public int roll(){
         value = (int) (Math.random()*6)+1;
+        return value;
     }
             
 }

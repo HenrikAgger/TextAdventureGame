@@ -5,24 +5,36 @@
  */
 package model;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 /**
  *
  * @author Henrik
  */
 public class Monster {
+    private int d;
 
-    private String monster;
-
-    public Monster(String monster) {
-        this.monster = monster;
+    private String monsterName;
+;
+    
+    public Monster(String monsterName) {
+        this.monsterName = monsterName;
     }
 
-    public String getMonster() {
-        return monster;
+    public String getMonsterName() {
+        return monsterName;
     }
 
-    public void setMonster(String monster) {
-        this.monster = monster;
+    public void setMonsterName(String monsterName) {
+        this.monsterName = monsterName;
     }
+    
+    public int monsterFight(Dice dice){
+        d = dice.roll();
+        return d;
+    }
+    
+
 
 }

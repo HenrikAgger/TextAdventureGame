@@ -6,6 +6,8 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.ArrayBlockingQueue;
 import model.Event;
 import model.Monster;
@@ -17,17 +19,16 @@ import model.Player;
  */
 public class Main {
 
-    public static void main(String[] args) throws IOException{
-
+    public static void main(String[] args) throws IOException {
         int limit = 1;
         int counter = 0;
-
+        
         ArrayBlockingQueue<Event> events = new ArrayBlockingQueue<>(5);
-
-        Player player = new Player("Kurt");
+        
+        Player player = new Player("Kurt");        
         Monster monster = new Monster("Troll");
-
-        Controller controller = new Controller(events);
+        
+        Controller controller = new Controller(events, monster);
         controller.runGame();
     }
 }

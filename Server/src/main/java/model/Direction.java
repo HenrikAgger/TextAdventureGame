@@ -9,6 +9,9 @@ package model;
  *
  * @author Henrik
  */
-public class Direction {
-    
-}
+public enum Direction {
+    NORTH,
+    EAST, 
+    SOUTH,
+    WEST;
+};

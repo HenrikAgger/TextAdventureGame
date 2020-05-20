@@ -12,9 +12,13 @@ import java.io.PrintWriter;
  * @author Henrik
  */
 public class Player {
-
+    private int d1; 
+    private int d2;
+    private int g;
+    private int goldTotal;
     private String name;
     private PrintWriter out;
+    private Room room;
 
     public Player(String name) {
         this.name = name;
@@ -35,6 +39,14 @@ public class Player {
         this.out = out;
     }
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
     public PrintWriter getWriter() {
         return this.out;
     }
@@ -50,5 +62,23 @@ public class Player {
     public PrintWriter getOut() {
         return out;
     }
+
+    public int playerFight(Dice dice) {
+        d1 = dice.roll();
+        d2 = dice.roll();
+        return d1+d2;
+    }
+    
+    public int playerGold(Gold gold){
+        g = gold.rGold();
+        return g;
+    }     
+    
+    public int playerGoldTotal(Gold gold){
+        goldTotal += g;
+        return goldTotal;
+    }
+    
+   
 
 }
