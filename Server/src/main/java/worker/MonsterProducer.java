@@ -28,18 +28,18 @@ public class MonsterProducer extends Thread {
 
     public MonsterProducer(Controller controller) throws IOException {
         this.controller = controller;
-        
+
         File file = new File("test.txt");
         this.printWriter = new PrintWriter(file);
 //        this.br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     public void run() {
+        String line = "Troll";
+        player = controller.registerPlayer(line, printWriter);
         while (true) {
             try {
                 sleep(10000);
-                String line = "Troll";
-                player = controller.registerPlayer(line, printWriter);
                 line = "FIGHTPLAYER";
                 controller.processMessage(player, line);
                 Event event = new Event(line);

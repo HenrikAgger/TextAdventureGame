@@ -41,8 +41,10 @@ public class Controller {
     Dice dice;
     Gold gold;
     Random r = new Random();
+    protected Room spawnPoint;
     ArrayList<Monster> monsters = new ArrayList<Monster>();
     ArrayList<Player> players = new ArrayList<Player>();
+    PrintWriter[] printWrither;
 
     /**
      *
@@ -104,13 +106,23 @@ public class Controller {
         room4.addRoomToExit(Direction.WEST, room3);
 
         room5.addRoomToExit(Direction.EAST, room6); //EXIT        
+
+        this.spawnPoint = room1;
     }
 
     public void runGame() throws IOException {
         // Now initializing clienthandler_producer
         System.out.println("Waiting");
-        Socket s = ss.accept();
-        Producer producer = new Producer(s, this);
+        ArrayList<Producer> producers = new ArrayList<>();
+        int counter = 0;
+        int limit = 3;
+        while (counter < limit) {
+            counter++;
+            Socket s = ss.accept();
+            Producer producer = new Producer(s, this);
+            producers.add(producer);
+        }
+
         int choice = 0;
         boolean notempty = true;
 
@@ -148,7 +160,10 @@ public class Controller {
         MonsterProducer monsterProducer = new MonsterProducer(this);
 
         consumer.start();
-        producer.start();
+        for (Producer producer : producers) {
+            producer.start();
+        }
+        
         monsterProducer.start();
 
 //        while (notempty) {
@@ -168,9 +183,12 @@ public class Controller {
     }
 
     public synchronized Player registerPlayer(String name, PrintWriter printWriter) {
+
         Player player = new Player(name, printWriter);
+
+        player.setRoom(this.spawnPoint);
+        this.spawnPoint.addPlayer(player);
         players.add(player);
-        player.setRoom(rooms.get(0));
         return player;
     }
 
@@ -232,8 +250,10 @@ public class Controller {
         // flyt spiller til det rum der ligger i direction NORTH
         // Hentes fra players nuværende rooms hashtable
         Room room = player.getRoom();
+        room.removePlayer(player);
         Room goToRoom = room.to(Direction.valueOf(targetToken));
         player.setRoom(goToRoom);
+        goToRoom.addPlayer(player);
         player.getWriter().println("You are in a new room called" + goToRoom.getName());
 
     }
@@ -264,21 +284,30 @@ public class Controller {
     public void fightPlayer(String targetToken, Player player) {
         gold = new Gold();
         dice = new Dice();
-        Player enemy = player.getRoom().getRandomPlayer();
-        
-        if (enemy==null){
+        int count = 0;
+        Player enemy = null;
+        do {
+            count++;
+            enemy = player.getRoom().getRandomPlayer();
+
+        } while (enemy.getName().equals(player.getName()) || count < 4);
+
+        if (enemy == null) {
             System.out.println("No enemy");
             return;
-        } 
+        }
         enemy.getWriter().println("Hi you are being attached " + targetToken);
         if (enemy.playerFight(dice) > player.playerFight(dice)) {
+            Event event = new Event("Monster wins");
+            events.add(event);
             System.out.println("You are fighting a " + player.getName());
-            System.out.println("Enemy wins");
+            System.out.println("Enemy wins"+enemy.getName());
             System.out.println("You won " + enemy.playerGold(gold) + " pices of gold");
             System.out.println("Total amount of gold: " + enemy.playerGoldTotal(gold));
         } else {
             System.out.println(player.getName() + " wins, RIP");
-
+            Event event = new Event("Player wins");
+            events.add(event);
         }
     }
 

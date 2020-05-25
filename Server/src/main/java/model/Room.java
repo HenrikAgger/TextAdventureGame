@@ -5,8 +5,10 @@
  */
 package model;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.Random;
+import java.util.Set;
 
 /**
  *
@@ -50,9 +52,17 @@ public class Room {
     }
    
     public Player getRandomPlayer(){
+        Set<String> keys = players.keySet();
+        ArrayList<String> lists = new ArrayList<String>();
+        for (String list : keys) {
+            lists.add(list);
+        }
         Player player = null;
         if (players.size()>0){
-        return players.get(0);//r.nextInt(players.size())
+            int idx = r.nextInt(players.size());
+            String key = lists.get(idx);
+            player = players.get(key);
+            
         } 
         return player;
     }

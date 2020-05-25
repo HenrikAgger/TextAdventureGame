@@ -48,6 +48,7 @@ public class Producer extends Thread {
 
                 line = br.readLine();
                 player = controller.registerPlayer(line, printWriter);
+                Thread.currentThread().setName(line);
                 while ((line = br.readLine()) != null) {
                     controller.processMessage(player, line);
                     

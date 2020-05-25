@@ -29,6 +29,7 @@ public class Main {
         Monster monster = new Monster("Troll");
         
         Controller controller = new Controller(events, monster);
+        controller.initGame();
         controller.runGame();
     }
 }
