@@ -18,7 +18,7 @@ import model.Player;
  *
  * @author Henrik
  */
-public class Producer extends Thread {
+public class PlayerProducer extends Thread {
 
     private Socket socket;
     private PrintWriter printWriter;
@@ -26,7 +26,7 @@ public class Producer extends Thread {
     private Controller controller;
     private Player player;
 
-    public Producer(Socket socket, Controller controller) throws IOException {
+    public PlayerProducer(Socket socket, Controller controller) throws IOException {
         this.socket = socket;
         this.controller = controller;
         this.printWriter = new PrintWriter(socket.getOutputStream(), true);

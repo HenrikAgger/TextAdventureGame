@@ -20,15 +20,7 @@ import model.Player;
 public class Main {
 
     public static void main(String[] args) throws IOException {
-        int limit = 1;
-        int counter = 0;
-        
-        ArrayBlockingQueue<Event> events = new ArrayBlockingQueue<>(5);
-        
-        Player player = new Player("Kurt");        
-        Monster monster = new Monster("Troll");
-        
-        Controller controller = new Controller(events, monster);
+        Controller controller = new Controller();
         controller.initGame();
         controller.runGame();
     }
