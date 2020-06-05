@@ -1,0 +1,45 @@
+@startuml
+actor Alice
+boundary Main
+participant Controller
+participant Monster
+participant Room
+collections PlayerProducer
+collections MonsterProducer
+participant Player
+participant Gold
+
+Alice -> Main
+Main -> Controller : initGame()
+activate Controller
+Controller -> Monster : new Monster()
+activate Monster
+Monster --> Controller : monster
+Controller -> Room : new Room()
+activate Room
+Room --> Controller : room
+Controller -> Room: room.addRoomToExit(Direction, room)
+
+Main -> Controller : runGame()
+Controller -> PlayerProducer : new PlayerProducer(socket,controller)
+activate PlayerProducer
+PlayerProducer -> Controller : registerPlayer(name, PrintWriter)
+Controller -> Player : new Player()
+activate Player
+Player --> Controller : player
+Controller -> Player : setRoom(room)
+Controller -> Room : setPlayer(player)
+Controller -> PlayerProducer: player
+Controller -> MonsterProducer: new MonsterProducer
+activate MonsterProducer
+MonsterProducer -> Controller : registerPlayer(monstername, FileWriter)
+note right of MonsterProducer
+	Monster is just another player
+end note
+Controller -> Player : new Player()
+Player --> Controller : player
+Controller -> Player : setRoom(room)
+Controller -> Room : setPlayer(player)
+
+
+@enduml

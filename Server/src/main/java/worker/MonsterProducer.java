@@ -5,6 +5,7 @@
  */
 package worker;
 
+import Interfaces.Actor;
 import controller.Controller;
 import java.io.BufferedReader;
 import java.io.File;
@@ -24,7 +25,7 @@ public class MonsterProducer extends Thread {
     private PrintWriter printWriter;
     private BufferedReader br;
     private Controller controller;
-    private Player player;
+    private Actor player;
 
     public MonsterProducer(Controller controller) throws IOException {
         this.controller = controller;

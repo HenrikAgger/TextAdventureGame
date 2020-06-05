@@ -5,6 +5,7 @@
  */
 package worker;
 
+import Interfaces.Actor;
 import controller.Controller;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -24,7 +25,7 @@ public class PlayerProducer extends Thread {
     private PrintWriter printWriter;
     private BufferedReader br;
     private Controller controller;
-    private Player player;
+    private Actor player;
 
     public PlayerProducer(Socket socket, Controller controller) throws IOException {
         this.socket = socket;
